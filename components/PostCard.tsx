@@ -1,5 +1,5 @@
 // TODO: Update the import path below if your type is located elsewhere
-import { PostResponse } from "../lib/posts";
+import { PostResponse } from "../lib/types/posts";
 
 type PostCardProps = Partial<PostResponse>;
 

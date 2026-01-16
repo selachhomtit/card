@@ -1,6 +1,6 @@
 import Link from "next/link";
-import { PostResponse } from "../lib/posts";
-import PostCard from "../components/PostCard";
+import { PostResponse } from "../../lib/types/posts";
+import PostCard from "../../components/PostCard";
 
 async function fetchPost() {
     const BASE_API = process.env.NEXT_PUBLIC_API_URL

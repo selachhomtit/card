@@ -1,65 +1,59 @@
 "use client";
 
 import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 import { Button } from "./ui/button";
-
 import {
   Card,
-  CardAction,
   CardContent,
-  CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "./ui/card";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
-import * as z from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
 
-type LoginType = {
-  email: string;
-  password: string;
-};
-
+/* ---------------- Zod Schema ---------------- */
 const formSchema = z.object({
-  email: z.email("Please input email").nonempty(),
-  password: z.string().min(8, "At lest 8 characters").nonempty(),
+  email: z
+    .string()
+    .min(1, "Email is required")
+    .email("Invalid email address"),
+  password: z
+    .string()
+    .min(8, "At least 8 characters"),
 });
 
+type FormData = z.infer<typeof formSchema>;
+
 export default function LoginForm() {
-  // 1. Define form
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors },
-  } = useForm<z.infer<typeof formSchema>>({
+    watch,
+  } = useForm<FormData>({
     resolver: zodResolver(formSchema),
   });
 
-  function loginSubmit(data: any) {
-    console.log("login clicked: ", data);
-  }
+  const loginSubmit = (data: FormData) => {
+    console.log("Login clicked:", data);
+  };
 
   console.log(watch("email"));
 
   return (
     <Card className="w-full max-w-sm">
-
       <CardHeader>
-
         <CardTitle>Login to your account</CardTitle>
-
       </CardHeader>
 
       <CardContent>
-
         <form onSubmit={handleSubmit(loginSubmit)}>
-
           <div className="flex flex-col gap-6">
             
+            {/* Email */}
             <div className="grid gap-2">
               <Label htmlFor="email">Email</Label>
               <Input
@@ -68,20 +62,34 @@ export default function LoginForm() {
                 placeholder="m@example.com"
                 {...register("email")}
               />
-              <p className="text-red-500">{errors.email?.message}</p>
+              {errors.email && (
+                <p className="text-red-500 text-sm">
+                  {errors.email.message}
+                </p>
+              )}
             </div>
+
+            {/* Password */}
             <div className="grid gap-2">
-              <div className="flex items-center">
-                <Label htmlFor="password">Password</Label>
-              </div>
-              <Input id="password" type="password" {...register("password")} />
-              <p className="text-red-500">{errors.password?.message}</p>
+              <Label htmlFor="password">Password</Label>
+              <Input
+                id="password"
+                type="password"
+                {...register("password")}
+              />
+              {errors.password && (
+                <p className="text-red-500 text-sm">
+                  {errors.password.message}
+                </p>
+              )}
             </div>
-            {/* buttons */}
+
+            {/* Buttons */}
             <Button type="submit" className="w-full">
               Login
             </Button>
-            <Button variant="outline" className="w-full">
+
+            <Button type="button" variant="outline" className="w-full">
               Login with Google
             </Button>
           </div>

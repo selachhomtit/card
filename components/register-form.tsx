@@ -1,6 +1,9 @@
 "use client";
+
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import Link from "next/link";
 
 import { Button } from "./ui/button";
 import {
@@ -23,28 +26,26 @@ import {
 } from "./ui/form";
 
 import { Input } from "./ui/input";
-import { useForm } from "react-hook-form";
 
-
+/* ---------------- Zod Schema ---------------- */
 const formSchema = z.object({
   email: z
-    .email("Invalid email")
-    .nonempty("Please enter your email"),
+    .string()
+    .min(1, "Please enter your email")
+    .email("Invalid email"),
 
   password: z
     .string()
     .min(8, "Password must be at least 8 characters")
-    .regex(/[A-Z]/, {message: "Must contain one uppercase letter"})
-    .regex(/[a-z]/, {message: "Must contain one lowercase letter"})
-    .regex(/[0-9]/, {message: "Must contain one number"})
-    .regex(/[^A-Za-z0-9]/, {message: "Must contain one special character"}),
+    .regex(/[A-Z]{2}/, "Must contain at least one uppercase letter")
+    .regex(/[a-z]{2}/, "Must contain at least one lowercase letter")
+    .regex(/[0-9]/, "Must contain at least one number")
+    .regex(/[^A-Za-z0-9]/, "Must contain at least one special character"),
 });
 
 type RegisterType = z.infer<typeof formSchema>;
 
-
 export default function RegisterForm() {
-
   const form = useForm<RegisterType>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -52,10 +53,7 @@ export default function RegisterForm() {
       password: "",
     },
   });
-  const {
-    handleSubmit,
-    control,
-  }=form;
+
   function onSubmit(data: RegisterType) {
     console.log("Register data:", data);
   }
@@ -67,22 +65,23 @@ export default function RegisterForm() {
         <CardDescription>
           Enter your email and password to register
         </CardDescription>
+
+        {/* Login link */}
         <CardAction>
-          <Button variant="link">Login</Button>
+          <Button variant="link" asChild>
+            <Link href="/login">Login</Link>
+          </Button>
         </CardAction>
       </CardHeader>
 
       <CardContent>
         <Form {...form}>
-          <form
-            onSubmit={handleSubmit(onSubmit)}
-            className="space-y-6"
-          >
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
             {/* Email */}
             <FormField
-              control={control}
+              control={form.control}
               name="email"
-              render={({ field }: { field: import("react-hook-form").ControllerRenderProps<RegisterType, "email"> }) => (
+              render={({ field }) => (
                 <FormItem>
                   <FormLabel>Email</FormLabel>
                   <FormControl>
@@ -101,25 +100,35 @@ export default function RegisterForm() {
             <FormField
               control={form.control}
               name="password"
-              render={({ field }: { field: import("react-hook-form").ControllerRenderProps<RegisterType, "password"> }) => (
+              render={({ field }) => (
                 <FormItem>
                   <FormLabel>Password</FormLabel>
                   <FormControl>
-                    <Input type="password" placeholder="***" {...field} />
+                    <Input type="password" placeholder="********" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
 
-            {/* Buttons MUST be inside form */}
-            <CardFooter className="flex-col gap-2 px-0">
+            {/* Buttons */}
+            <CardFooter className="flex flex-col gap-2 px-0">
               <Button type="submit" className="w-full">
                 Register
               </Button>
+
               <Button type="button" variant="outline" className="w-full">
                 Register with Google
               </Button>
+              <div className="text-center text-sm text-muted-foreground">
+                Don’t have an account?{" "}
+                <Link
+                  href="/login"
+                  className="font-medium text-primary hover:underline"
+                >
+                  Login
+                </Link>
+              </div>
             </CardFooter>
           </form>
         </Form>

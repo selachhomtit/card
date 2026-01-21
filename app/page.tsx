@@ -28,8 +28,8 @@ export default function Home() {
 
       <Button
        variant="ghost">Click me</Button> */}
-       {/* <LoginForm/> */}
-       <RegisterForm/>
+       <LoginForm/>
+       
     </div>
   );
 }

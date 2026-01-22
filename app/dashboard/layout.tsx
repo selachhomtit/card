@@ -4,6 +4,6 @@ export default function DashBoardLayout({
   children: React.ReactNode;
 }) {
   return (
-      <section className="bg-amber-300">{children}</section>
+      <section >{children}</section>
   );
 }

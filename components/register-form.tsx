@@ -37,8 +37,8 @@ const formSchema = z.object({
   password: z
     .string()
     .min(8, "Password must be at least 8 characters")
-    .regex(/[A-Z]{2}/, "Must contain at least one uppercase letter")
-    .regex(/[a-z]{2}/, "Must contain at least one lowercase letter")
+    .regex(/[A-Z]/, "Must contain at least one uppercase letter")
+    .regex(/[a-z]/, "Must contain at least one lowercase letter")
     .regex(/[0-9]/, "Must contain at least one number")
     .regex(/[^A-Za-z0-9]/, "Must contain at least one special character"),
 });
@@ -59,80 +59,86 @@ export default function RegisterForm() {
   }
 
   return (
-    <Card className="w-full max-w-sm">
-      <CardHeader>
-        <CardTitle>Create an account</CardTitle>
-        <CardDescription>
-          Enter your email and password to register
-        </CardDescription>
+    /* ✅ CENTER CONTAINER */
+    <div className="min-h-screen flex items-center justify-center">
+      <Card className="w-full max-w-sm">
+        <CardHeader>
+          <CardTitle>Create an account</CardTitle>
+          <CardDescription>
+            Enter your email and password to register
+          </CardDescription>
 
-        {/* Login link */}
-        <CardAction>
-          <Button variant="link" asChild>
-            <Link href="/login">Login</Link>
-          </Button>
-        </CardAction>
-      </CardHeader>
+          <CardAction>
+            <Button variant="link" asChild>
+              <Link href="/login">Login</Link>
+            </Button>
+          </CardAction>
+        </CardHeader>
 
-      <CardContent>
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-            {/* Email */}
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Email</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="email"
-                      placeholder="m@example.com"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+        <CardContent>
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+              {/* Email */}
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Email</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="email"
+                        placeholder="m@example.com"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-            {/* Password */}
-            <FormField
-              control={form.control}
-              name="password"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Password</FormLabel>
-                  <FormControl>
-                    <Input type="password" placeholder="********" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+              {/* Password */}
+              <FormField
+                control={form.control}
+                name="password"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Password</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="password"
+                        placeholder="********"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-            {/* Buttons */}
-            <CardFooter className="flex flex-col gap-2 px-0">
-              <Button type="submit" className="w-full">
-                Register
-              </Button>
+              <CardFooter className="flex flex-col gap-2 px-0">
+                <Button type="submit" className="w-full">
+                  Register
+                </Button>
 
-              <Button type="button" variant="outline" className="w-full">
-                Register with Google
-              </Button>
-              <div className="text-center text-sm text-muted-foreground">
-                Don’t have an account?{" "}
-                <Link
-                  href="/login"
-                  className="font-medium text-primary hover:underline"
-                >
-                  Login
-                </Link>
-              </div>
-            </CardFooter>
-          </form>
-        </Form>
-      </CardContent>
-    </Card>
+                <Button type="button" variant="outline" className="w-full">
+                  Register with Google
+                </Button>
+
+                <div className="text-center text-sm text-muted-foreground">
+                  Don’t have an account?{" "}
+                  <Link
+                    href="/login"
+                    className="font-medium text-primary hover:underline"
+                  >
+                    Login
+                  </Link>
+                </div>
+              </CardFooter>
+            </form>
+          </Form>
+        </CardContent>
+      </Card>
+    </div>
   );
 }
